@@ -552,7 +552,7 @@ namespace WPFMediaKit.DirectShow.MediaPlayers
                 SetupFilterGraph(m_graph);
 
                 /* Sets the NaturalVideoWidth/Height */
-                //SetNativePixelSizes(renderer);
+                SetNativePixelSizes(renderer);
             }
             catch (Exception ex)
             {
