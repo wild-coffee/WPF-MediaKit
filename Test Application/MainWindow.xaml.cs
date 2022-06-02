@@ -16,6 +16,9 @@ namespace Test_Application
             InitializeComponent();
 
             this.Closing += MainWindow_Closing;
+            this.mediaUriElement.MediaOpened += MediaUriElement_MediaOpened;
+            this.mediaUriElement.MediaClosed += MediaUriElement_MediaClosed;
+            this.mediaUriElement.MediaEnded += MediaUriElement_MediaEnded;
             this.mediaUriElement.MediaFailed += MediaUriElement_MediaFailed;
             this.mediaUriElement.MediaUriPlayer.MediaPositionChanged += MediaUriPlayer_MediaPositionChanged;
 
@@ -24,6 +27,23 @@ namespace Test_Application
                 cobVideoSource.ItemsSource = MultimediaUtil.VideoInputNames;
             }
             SetCameraCaptureElementVisible(false);
+        }
+
+        private void MediaUriElement_MediaEnded(object sender, RoutedEventArgs e)
+        {
+            this.Dispatcher.BeginInvoke(new Action(() => errorText.Text += $"============== MediaEnded\r\n"));
+        }
+
+        private void MediaUriElement_MediaClosed(object sender, RoutedEventArgs e)
+        {
+            this.Dispatcher.BeginInvoke(new Action(() => errorText.Text += $"============== MediaClosed\r\n"));
+        }
+
+        private void MediaUriElement_MediaOpened(object sender, RoutedEventArgs e)
+        {
+            this.Dispatcher.BeginInvoke(new Action(() => errorText.Text += $"============== MediaOpened\r\n"));
+            this.Dispatcher.BeginInvoke(new Action(() => errorText.Text += $"============== W = {mediaUriElement.NaturalVideoWidth}\r\n"));
+            this.Dispatcher.BeginInvoke(new Action(() => errorText.Text += $"============== H = {mediaUriElement.NaturalVideoHeight}\r\n"));
         }
 
         private void SetCameraCaptureElementVisible(bool visible)
@@ -69,7 +89,7 @@ namespace Test_Application
 
         private void MediaUriElement_MediaFailed(object sender, WPFMediaKit.DirectShow.MediaPlayers.MediaFailedEventArgs e)
         {
-            this.Dispatcher.BeginInvoke(new Action(() => errorText.Text = e.Message));
+            this.Dispatcher.BeginInvoke(new Action(() => errorText.Text += $"============== MediaFailed {e.Message}\r\n"));
         }
 
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
